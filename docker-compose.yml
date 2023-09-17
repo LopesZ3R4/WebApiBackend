@@ -1,0 +1,19 @@
+version: '3'
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "8000:80"
+  sql_server:
+    build: 
+      context: .
+      dockerfile: dockerfile.sql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "@Senhamuitoforte1234"
+    ports:
+      - "1401:1433"
+    volumes:
+      - ./init-script.sql:/docker-entrypoint-initdb.d/init-script.sql
