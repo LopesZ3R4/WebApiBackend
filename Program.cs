@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Services; // Add this line if AuthenticationService is in the Services namespace
 using Data;
-using Microsoft.EntityFrameworkCore; // Add this line if UserRepository is in the Data namespace
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient; // Add this line if UserRepository is in the Data namespace
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +14,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Register ApplicationDbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+try
+{
+    using var connection = new SqlConnection(connectionString);
+    connection.Open(); // Try to open the connection
+}
+catch
+{
+    // If the connection fails, switch to the fallback connection
+    connectionString = builder.Configuration.GetConnectionString("FallbackConnection");
+}
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 // Register AuthenticationService and UserRepository
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<UserRepository>();
