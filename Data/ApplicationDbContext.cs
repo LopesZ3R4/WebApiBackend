@@ -1,4 +1,4 @@
-// ApplicationDbContext.cs
+// .\Data\ApplicationDbContext.cs
 using Microsoft.EntityFrameworkCore;
 
 
@@ -11,5 +11,4 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
 
-    // Add additional DbSets for other entities
 }
