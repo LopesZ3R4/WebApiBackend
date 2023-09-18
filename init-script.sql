@@ -32,10 +32,12 @@ PRINT 'Creating Users table...'
 CREATE TABLE Users
 (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    Username NVARCHAR(50) NOT NULL,
+    Username NVARCHAR(50) NOT NULL UNIQUE,
     HashedPassword NVARCHAR(128) NOT NULL,
-    UserType NVARCHAR(50) NOT NULL
+    UserType NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(255) NOT NULL UNIQUE
 );
 CREATE INDEX idx_username ON Users (Username);
+CREATE INDEX idx_email ON Users (Email);
 
 PRINT 'Initialization script completed successfully.'

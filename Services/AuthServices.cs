@@ -1,4 +1,4 @@
-// File Path: c:\WebApiBackend\Services\AuthServices
+// .\Services\AuthServices
 using System.Security.Cryptography;
 using System.Text;
 using Data;
@@ -13,14 +13,14 @@ namespace Services {
         _userRepository = userRepository;
     }
 
-    public bool ValidateCredentials(string username, string password)
+    public bool ValidateCredentials(string Username, string password)
     {
         Console.WriteLine("Initializing Credentials Validation");
-        var user = _userRepository.Get(username);
+        var user = _userRepository.Get(Username);
 
         if (user == null)
         {   
-            Console.WriteLine($"No user found with username: {username}");
+            Console.WriteLine($"No user found with user: {Username}");
             return false;
         }
 
