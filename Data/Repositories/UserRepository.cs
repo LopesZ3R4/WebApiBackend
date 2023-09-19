@@ -1,4 +1,4 @@
-// .\Data\UserRepository.cs
+// .\Data\Repositories\UserRepository.cs
 
 using Microsoft.EntityFrameworkCore;
 
