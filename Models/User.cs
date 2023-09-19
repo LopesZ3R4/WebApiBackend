@@ -1,4 +1,4 @@
-//File Path: /Models/UserModel.cs
+//File Path: /Models/User.cs
 
 public class User
 {
