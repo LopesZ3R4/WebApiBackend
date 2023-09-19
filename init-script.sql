@@ -41,4 +41,94 @@ CREATE TABLE Users
 CREATE INDEX idx_username ON Users (Username);
 CREATE INDEX idx_email ON Users (Email);
 
+
+CREATE TABLE Alert (
+    alert_id INT PRIMARY KEY,
+    total INT,
+    color NVARCHAR(255),
+    severity NVARCHAR(255),
+    acknowledgementStatus NVARCHAR(255),
+    ignored BIT,
+    invisible BIT,
+    time DATETIME
+);
+
+CREATE TABLE Link (
+    link_id INT PRIMARY KEY,
+    rel NVARCHAR(255),
+    uri NVARCHAR(255),
+    alert_id INT FOREIGN KEY REFERENCES Alert(alert_id)
+);
+
+CREATE TABLE Value (
+    value_id INT PRIMARY KEY,
+    alert_id INT FOREIGN KEY REFERENCES Alert(alert_id),
+    type NVARCHAR(255),
+    occurrences NVARCHAR(255),
+    machineLinearTime BIGINT,
+    bus NVARCHAR(255),
+    id NVARCHAR(255)
+);
+
+CREATE TABLE Duration (
+    duration_id INT PRIMARY KEY,
+    value_id INT FOREIGN KEY REFERENCES Value(value_id),
+    type NVARCHAR(255),
+    valueAsInteger NVARCHAR(255),
+    unit NVARCHAR(255)
+);
+
+CREATE TABLE EngineHours (
+    engine_hours_id INT PRIMARY KEY,
+    value_id INT FOREIGN KEY REFERENCES Value(value_id),
+    type NVARCHAR(255),
+    valueAsDouble NVARCHAR(255),
+    unit NVARCHAR(255)
+);
+
+CREATE TABLE Location (
+    location_id INT PRIMARY KEY,
+    value_id INT FOREIGN KEY REFERENCES Value(value_id),
+    type NVARCHAR(255),
+    lat DECIMAL(9,6),
+    lon DECIMAL(9,6)
+);
+
+CREATE TABLE Definition (
+    definition_id INT PRIMARY KEY,
+    value_id INT FOREIGN KEY REFERENCES Value(value_id),
+    type NVARCHAR(255),
+    suspectParameterName NVARCHAR(255),
+    failureModeIndicator NVARCHAR(255),
+    bus NVARCHAR(255),
+    sourceAddress NVARCHAR(255),
+    threeLetterAcronym NVARCHAR(255),
+    id NVARCHAR(255),
+    description NVARCHAR(MAX)
+);
+
+CREATE TABLE DefinitionLink (
+    definition_link_id INT PRIMARY KEY,
+    definition_id INT FOREIGN KEY REFERENCES Definition(definition_id),
+    type NVARCHAR(255),
+    rel NVARCHAR(255),
+    uri NVARCHAR(255)
+);
+
+CREATE TABLE AlertLink (
+    alert_link_id INT PRIMARY KEY,
+    value_id INT FOREIGN KEY REFERENCES Value(value_id),
+    type NVARCHAR(255),
+    rel NVARCHAR(255),
+    uri NVARCHAR(255)
+);
+
+CREATE INDEX idx_alert ON Link(alert_id);
+CREATE INDEX idx_value ON Duration(value_id);
+CREATE INDEX idx_value ON EngineHours(value_id);
+CREATE INDEX idx_value ON Location(value_id);
+CREATE INDEX idx_value ON Definition(value_id);
+CREATE INDEX idx_definition ON DefinitionLink(definition_id);
+CREATE INDEX idx_value ON AlertLink(value_id);
+
 PRINT 'Initialization script completed successfully.'
