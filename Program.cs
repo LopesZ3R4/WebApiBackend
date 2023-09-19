@@ -2,15 +2,31 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Services; // Add this line if AuthenticationService is in the Services namespace
+using Services;
 using Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient; // Add this line if UserRepository is in the Data namespace
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "backendapplication",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("@Senhamuitoforte1234"))
+        };
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -18,16 +34,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 try
 {
     using var connection = new SqlConnection(connectionString);
-    connection.Open(); // Try to open the connection
+    connection.Open();
 }
 catch
 {
-    // If the connection fails, switch to the fallback connection
     connectionString = builder.Configuration.GetConnectionString("FallbackConnection");
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+    
 // Register AuthenticationService and UserRepository
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<UserRepository>();
@@ -45,6 +61,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

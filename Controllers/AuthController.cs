@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Services;
 using Data;
 using Utils;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 [ApiController]
 [Route("[controller]")]
@@ -17,7 +21,6 @@ public class AuthController : ControllerBase
         _userRepository = userRepository;
     }
 
-    [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest request)
     {
         var isValid = _authService.ValidateCredentials(request.Username, request.Password);
@@ -27,8 +30,35 @@ public class AuthController : ControllerBase
             return Unauthorized();
         }
 
-        Console.WriteLine("User authenticated successfully");
-        return Ok();
+        // Create a claim
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, request.Username),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        // Generate token
+        var token = new JwtSecurityToken
+        (
+            issuer: "your_issuer",
+            audience: "your_audience",
+            claims: claims,
+            expires: DateTime.UtcNow.AddDays(1),
+            notBefore: DateTime.UtcNow,
+            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key")), SecurityAlgorithms.HmacSha256)
+        );
+
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+        // Retrieve user from database
+        var user = _userRepository.Get(request.Username);
+
+        // Assign token to user and save changes
+        user.Token = tokenString;
+        _userRepository.Update(user); // You'll need to implement this method in your UserRepository
+
+        // Send token to client
+        return Ok(new { Token = tokenString });
     }
 
     [HttpPost("register")]

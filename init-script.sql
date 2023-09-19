@@ -35,7 +35,8 @@ CREATE TABLE Users
     Username NVARCHAR(50) NOT NULL UNIQUE,
     HashedPassword NVARCHAR(128) NOT NULL,
     UserType NVARCHAR(50) NOT NULL,
-    Email NVARCHAR(255) NOT NULL UNIQUE
+    Email NVARCHAR(255) NOT NULL UNIQUE,
+    Token NVARCHAR(255)
 );
 CREATE INDEX idx_username ON Users (Username);
 CREATE INDEX idx_email ON Users (Email);
