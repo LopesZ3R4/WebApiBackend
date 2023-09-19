@@ -47,6 +47,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register AuthenticationService and UserRepository
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<AlertRepository>();
+builder.Services.AddScoped<LinkRepository>();
+builder.Services.AddScoped<ValueRepository>();
+builder.Services.AddScoped<DurationRepository>();
+builder.Services.AddScoped<EngineHoursRepository>();
+builder.Services.AddScoped<LocationRepository>();
+builder.Services.AddScoped<DefinitionRepository>();
+builder.Services.AddScoped<DefinitionLinkRepository>();
+builder.Services.AddScoped<AlertLinkRepository>();
 
 var app = builder.Build();
 
