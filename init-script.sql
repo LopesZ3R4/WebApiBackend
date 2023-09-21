@@ -42,93 +42,59 @@ CREATE INDEX idx_username ON Users (Username);
 CREATE INDEX idx_email ON Users (Email);
 
 
-CREATE TABLE Alert (
-    alert_id INT PRIMARY KEY,
-    total INT,
-    color NVARCHAR(255),
-    severity NVARCHAR(255),
-    acknowledgementStatus NVARCHAR(255),
-    ignored BIT,
-    invisible BIT,
-    time DATETIME
+CREATE TABLE Alerts (
+    Id NVARCHAR(50) PRIMARY KEY,
+    Type NVARCHAR(50),
+    Occurrences NVARCHAR(50),
+    EngineHoursType NVARCHAR(50),
+    ValueAsDouble FLOAT,
+    Unit NVARCHAR(50),
+    MachineLinearTime INT,
+    Bus NVARCHAR(50),
+    Time DATETIME,
+    LocationType NVARCHAR(50),
+    Lat FLOAT,
+    Lon FLOAT,
+    Color NVARCHAR(50),
+    Severity NVARCHAR(50),
+    AcknowledgementStatus NVARCHAR(50),
+    Ignored BIT,
+    Invisible BIT
 );
 
-CREATE TABLE Link (
-    link_id INT PRIMARY KEY,
-    rel NVARCHAR(255),
-    uri NVARCHAR(255),
-    alert_id INT FOREIGN KEY REFERENCES Alert(alert_id)
+CREATE TABLE Durations (
+    AlertId NVARCHAR(50) PRIMARY KEY,
+    Type NVARCHAR(50),
+    ValueAsInteger NVARCHAR(50),
+    Unit NVARCHAR(50),
+    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
 );
 
-CREATE TABLE Value (
-    value_id INT PRIMARY KEY,
-    alert_id INT FOREIGN KEY REFERENCES Alert(alert_id),
-    type NVARCHAR(255),
-    occurrences NVARCHAR(255),
-    machineLinearTime BIGINT,
-    bus NVARCHAR(255),
-    id NVARCHAR(255)
+CREATE TABLE Definitions (
+    Id NVARCHAR(50) PRIMARY KEY,
+    AlertId NVARCHAR(50),
+    Type NVARCHAR(50),
+    SuspectParameterName NVARCHAR(50),
+    FailureModeIndicator NVARCHAR(50),
+    Bus NVARCHAR(50),
+    SourceAddress NVARCHAR(50),
+    ThreeLetterAcronym NVARCHAR(50),
+    Description NVARCHAR(MAX),
+    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
 );
 
-CREATE TABLE Duration (
-    duration_id INT PRIMARY KEY,
-    value_id INT FOREIGN KEY REFERENCES Value(value_id),
-    type NVARCHAR(255),
-    valueAsInteger NVARCHAR(255),
-    unit NVARCHAR(255)
+CREATE TABLE Links (
+    Id NVARCHAR(50) PRIMARY KEY,
+    AlertId NVARCHAR(50),
+    Type NVARCHAR(50),
+    Rel NVARCHAR(50),
+    Uri NVARCHAR(MAX),
+    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
 );
 
-CREATE TABLE EngineHours (
-    engine_hours_id INT PRIMARY KEY,
-    value_id INT FOREIGN KEY REFERENCES Value(value_id),
-    type NVARCHAR(255),
-    valueAsDouble NVARCHAR(255),
-    unit NVARCHAR(255)
-);
 
-CREATE TABLE Location (
-    location_id INT PRIMARY KEY,
-    value_id INT FOREIGN KEY REFERENCES Value(value_id),
-    type NVARCHAR(255),
-    lat DECIMAL(9,6),
-    lon DECIMAL(9,6)
-);
-
-CREATE TABLE Definition (
-    definition_id INT PRIMARY KEY,
-    value_id INT FOREIGN KEY REFERENCES Value(value_id),
-    type NVARCHAR(255),
-    suspectParameterName NVARCHAR(255),
-    failureModeIndicator NVARCHAR(255),
-    bus NVARCHAR(255),
-    sourceAddress NVARCHAR(255),
-    threeLetterAcronym NVARCHAR(255),
-    id NVARCHAR(255),
-    description NVARCHAR(MAX)
-);
-
-CREATE TABLE DefinitionLink (
-    definition_link_id INT PRIMARY KEY,
-    definition_id INT FOREIGN KEY REFERENCES Definition(definition_id),
-    type NVARCHAR(255),
-    rel NVARCHAR(255),
-    uri NVARCHAR(255)
-);
-
-CREATE TABLE AlertLink (
-    alert_link_id INT PRIMARY KEY,
-    value_id INT FOREIGN KEY REFERENCES Value(value_id),
-    type NVARCHAR(255),
-    rel NVARCHAR(255),
-    uri NVARCHAR(255)
-);
-
-CREATE INDEX idx_alert ON Link(alert_id);
-CREATE INDEX idx_value ON Duration(value_id);
-CREATE INDEX idx_value ON EngineHours(value_id);
-CREATE INDEX idx_value ON Location(value_id);
-CREATE INDEX idx_value ON Definition(value_id);
-CREATE INDEX idx_definition ON DefinitionLink(definition_id);
-CREATE INDEX idx_value ON AlertLink(value_id);
+CREATE INDEX IDX_Durations_AlertId ON Durations (AlertId);
+CREATE INDEX IDX_Definitions_AlertId ON Definitions (AlertId);
+CREATE INDEX IDX_Links_AlertId ON Links (AlertId);
 
 PRINT 'Initialization script completed successfully.'
