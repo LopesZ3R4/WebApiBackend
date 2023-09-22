@@ -23,8 +23,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "backendapplication",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("@Senhamuitoforte1234"))
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 builder.Services.AddEndpointsApiExplorer();
