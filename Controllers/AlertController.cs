@@ -10,6 +10,7 @@ using System.Text.Json;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class AlertController : ControllerBase
 {
     private readonly AlertRepository _alertRepository;
@@ -31,5 +32,30 @@ public class AlertController : ControllerBase
         }
 
         return Ok();
+    }
+    
+    [HttpGet("GetAlerts")]
+    public async Task<IActionResult> GetAlerts(string? type = null, string? color = null)
+    {
+        var alerts = await _alertRepository.GetAllAlertsAsync();
+
+        if (!string.IsNullOrEmpty(type))
+        {
+            alerts = alerts.Where(a => a.Type == type).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(color))
+        {
+            alerts = alerts.Where(a => a.Color == color).ToList();
+        }
+        var response = new 
+        {
+            count = alerts.Count,
+            alerts = alerts
+        };
+
+        var json = JsonSerializer.Serialize(response);
+
+        return Ok(json);
     }
 }
