@@ -24,7 +24,7 @@ public class AlertController : ControllerBase
     public async Task<IActionResult> Post([FromBody] JsonElement jsonElement)
     {
         var jsonMapper = new JsonMapper();
-        var alertData = jsonMapper.MapJsonToAlertData(jsonElement); // Assuming you have a method to map the entire JSON to AlertData
+        var alertData = jsonMapper.MapJsonToAlertData(jsonElement);
 
         foreach (var alert in alertData.Values)
         {
@@ -51,7 +51,7 @@ public class AlertController : ControllerBase
         var response = new 
         {
             count = alerts.Count,
-            alerts = alerts
+            alerts
         };
 
         var json = JsonSerializer.Serialize(response);

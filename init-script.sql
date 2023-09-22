@@ -42,15 +42,20 @@ CREATE INDEX idx_username ON Users (Username);
 CREATE INDEX idx_email ON Users (Email);
 
 
+-- File Path: ./init-script.sql
 CREATE TABLE Alerts (
-    Id NVARCHAR(50) PRIMARY KEY,
+    Id Int PRIMARY KEY,
     Type NVARCHAR(50),
+    DurationType NVARCHAR(50),
+    DurationValue FLOAT,
+    DurationUnit NVARCHAR(50),
     Occurrences NVARCHAR(50),
     EngineHoursType NVARCHAR(50),
-    ValueAsDouble FLOAT,
-    Unit NVARCHAR(50),
+    EngineHoursValue FLOAT,
+    EngineHoursUnit NVARCHAR(50),
     MachineLinearTime INT,
-    Bus NVARCHAR(50),
+    Bus Int,
+    DefinitionId Int,
     Time DATETIME,
     LocationType NVARCHAR(50),
     Lat FLOAT,
@@ -59,42 +64,28 @@ CREATE TABLE Alerts (
     Severity NVARCHAR(50),
     AcknowledgementStatus NVARCHAR(50),
     Ignored BIT,
-    Invisible BIT
-);
-
-CREATE TABLE Durations (
-    AlertId NVARCHAR(50) PRIMARY KEY,
-    Type NVARCHAR(50),
-    ValueAsInteger NVARCHAR(50),
-    Unit NVARCHAR(50),
-    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
+    Invisible BIT,
+    LinkType NVARCHAR(50),
+    LinkRel NVARCHAR(50),
+    LinkUri NVARCHAR(255),
+    DefinitionLinkType NVARCHAR(50),
+    DefinitionLinkRel NVARCHAR(50),
+    DefinitionLinkUri NVARCHAR(255) 
 );
 
 CREATE TABLE Definitions (
-    AlertId NVARCHAR(50) PRIMARY KEY,
-    Id NVARCHAR(50),
+    AlertId Int PRIMARY KEY,
+    Id Int,
     Type NVARCHAR(50),
     SuspectParameterName NVARCHAR(50),
     FailureModeIndicator NVARCHAR(50),
-    Bus NVARCHAR(50),
+    Bus Int,
     SourceAddress NVARCHAR(50),
     ThreeLetterAcronym NVARCHAR(50),
     Description NVARCHAR(MAX),
     FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
 );
 
-CREATE TABLE Links (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    AlertId NVARCHAR(50),
-    DefinitionID NVARCHAR(50),
-    Type NVARCHAR(50),
-    Rel NVARCHAR(50),
-    Uri NVARCHAR(MAX),
-);
-
-
-CREATE INDEX IDX_Durations_AlertId ON Durations (AlertId);
 CREATE INDEX IDX_Definitions_AlertId ON Definitions (AlertId);
-CREATE INDEX IDX_Links_AlertId ON Links (AlertId);
 
 PRINT 'Initialization script completed successfully.'
