@@ -71,8 +71,8 @@ CREATE TABLE Durations (
 );
 
 CREATE TABLE Definitions (
-    Id NVARCHAR(50) PRIMARY KEY,
-    AlertId NVARCHAR(50),
+    AlertId NVARCHAR(50) PRIMARY KEY,
+    Id NVARCHAR(50),
     Type NVARCHAR(50),
     SuspectParameterName NVARCHAR(50),
     FailureModeIndicator NVARCHAR(50),
@@ -84,12 +84,12 @@ CREATE TABLE Definitions (
 );
 
 CREATE TABLE Links (
-    Id NVARCHAR(50) PRIMARY KEY,
+    Id INT IDENTITY(1,1) PRIMARY KEY,
     AlertId NVARCHAR(50),
+    DefinitionID NVARCHAR(50),
     Type NVARCHAR(50),
     Rel NVARCHAR(50),
     Uri NVARCHAR(MAX),
-    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
 );
 
 

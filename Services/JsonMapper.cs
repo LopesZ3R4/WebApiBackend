@@ -43,6 +43,7 @@ public class JsonMapper
         var durationElement = valueElement.GetProperty("duration");
         alert.Duration = new Duration
         {
+            AlertId = valueElement.GetProperty("id").GetString(),
             Type = durationElement.GetProperty("@type").GetString(),
             ValueAsInteger = durationElement.GetProperty("valueAsInteger").GetString(),
             Unit = durationElement.GetProperty("unit").GetString()
@@ -51,6 +52,7 @@ public class JsonMapper
         var definitionElement = valueElement.GetProperty("definition");
         alert.Definition = new Definition
         {
+            AlertId = valueElement.GetProperty("id").GetString(),
             Type = definitionElement.GetProperty("@type").GetString(),
             SuspectParameterName = definitionElement.GetProperty("suspectParameterName").GetString(),
             FailureModeIndicator = definitionElement.GetProperty("failureModeIndicator").GetString(),
@@ -60,19 +62,38 @@ public class JsonMapper
             Id = definitionElement.GetProperty("id").GetString(),
             Description = definitionElement.GetProperty("description").GetString()
         };
-
-        // Assuming Link class has Type, Rel, Uri properties
-        var linksElement = valueElement.GetProperty("links");
-        alert.Links = new List<Link>();
-        foreach (var linkElement in linksElement.EnumerateArray())
+        
+        if (valueElement.TryGetProperty("links", out var alertLinksElement))
         {
-            var link = new Link
+            alert.Links = new List<Link>();
+            foreach (var linkElement in alertLinksElement.EnumerateArray())
             {
-                Type = linkElement.GetProperty("@type").GetString(),
-                Rel = linkElement.GetProperty("rel").GetString(),
-                Uri = linkElement.GetProperty("uri").GetString()
-            };
-            alert.Links.Add(link);
+                var link = new Link
+                {   
+                    AlertId = valueElement.GetProperty("id").GetString(),
+                    Type = linkElement.GetProperty("@type").GetString(),
+                    Rel = linkElement.GetProperty("rel").GetString(),
+                    Uri = linkElement.GetProperty("uri").GetString()
+                };
+                alert.Links.Add(link);
+            }
+        }
+
+
+        if (valueElement.TryGetProperty("links", out _))
+        {
+            alert.Links = new List<Link>();
+            foreach (var linkElement in alertLinksElement.EnumerateArray())
+            {
+                var link = new Link
+                {   
+                    AlertId = valueElement.GetProperty("id").GetString(),
+                    Type = linkElement.GetProperty("@type").GetString(),
+                    Rel = linkElement.GetProperty("rel").GetString(),
+                    Uri = linkElement.GetProperty("uri").GetString()
+                };
+                alert.Links.Add(link);
+            }
         }
 
         return alert;
