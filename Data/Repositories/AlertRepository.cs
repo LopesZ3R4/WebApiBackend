@@ -11,9 +11,9 @@ public class AlertRepository
     {
         _context = context;
     }
-    public Alert? Get(int Id)
+    public bool Exists(int Id)
         {
-            return _context.Alerts.FirstOrDefault(u => u.Id == Id);
+            return _context.Alerts.Any(u => u.Id == Id);
         }
     public async Task<List<Alert>> GetAllAlertsAsync()
     {

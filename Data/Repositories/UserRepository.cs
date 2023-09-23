@@ -17,7 +17,10 @@ namespace Data
         {
             return _context.Users.FirstOrDefault(u => u.Username == UsernameOrMail || u.Email == UsernameOrMail);
         }
-
+        public bool Exists(string Username,string Email)
+        {
+            return _context.Users.Any(u => u.Username == Username || u.Email == Email);
+        }
         public void Add(User user)
         {
             _context.Users.Add(user);

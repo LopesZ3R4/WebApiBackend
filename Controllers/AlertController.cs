@@ -28,9 +28,9 @@ public class AlertController : ControllerBase
 
         foreach (var alert in alertData.Values)
         {
-            var existingAlert = _alertRepository.Get(alert.Id);
+            var existingAlert = _alertRepository.Exists(alert.Id);
 
-            if (existingAlert == null)
+            if (existingAlert)
             {
                 await _alertRepository.AddAlertAsync(alert);
             }

@@ -65,10 +65,9 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Invalid email format");
         }
-        var existingUserWithSameUsername = _userRepository.Get(newUser.Username);
-        var existingUserWithSameEmail = _userRepository.Get(newUser.Email);
+        var existingUser = _userRepository.Exists(newUser.Username,newUser.Email);
 
-        if (existingUserWithSameUsername != null || existingUserWithSameEmail != null)
+        if (existingUser)
         {
             return Conflict("A user with the same username or email already exists");
         }
