@@ -12,7 +12,7 @@ public class Alert
     public string? Type { get; set; }
     [JsonProperty(PropertyName = "@type")]
     public string? DurationType { get; set; }
-    public double? DurationValue { get; set; }
+    public double DurationValue { get; set; }
     public string? DurationUnit { get; set; }
     public string? Occurrences { get; set; }
     public string? EngineHoursType { get; set; }

@@ -1,5 +1,6 @@
 // File Path: ./Services/JsonMapper.cs
 using System.Text.Json;
+using Utils;
 
 public class JsonMapper
 {
@@ -24,6 +25,7 @@ public class JsonMapper
         alert.Type = valueElement.GetProperty("@type").GetString();
         alert.Occurrences = valueElement.GetProperty("occurrences").GetString();
         alert.EngineHoursType = valueElement.GetProperty("engineHours").GetProperty("@type").GetString();
+        alert.EngineHoursUnit = valueElement.GetProperty("engineHours").GetProperty("reading").GetProperty("unit").GetString();
         alert.EngineHoursValue = valueElement.GetProperty("engineHours").GetProperty("reading").GetProperty("valueAsDouble").GetDouble();
         alert.MachineLinearTime = valueElement.GetProperty("machineLinearTime").GetInt32();
         alert.Bus = int.Parse(valueElement.GetProperty("bus").GetString());
@@ -40,6 +42,12 @@ public class JsonMapper
         alert.DurationType = valueElement.GetProperty("duration").GetProperty("@type").GetString();
         alert.DurationValue = double.Parse(valueElement.GetProperty("duration").GetProperty("valueAsInteger").GetString());
         alert.DurationUnit = valueElement.GetProperty("duration").GetProperty("unit").GetString();
+
+        alert.EngineHoursValue = TimeConversion.ConvertTime(alert.EngineHoursValue, alert.EngineHoursUnit, "Minutes");
+        alert.EngineHoursUnit = "Minutes";
+
+        alert.DurationValue = TimeConversion.ConvertTime(alert.DurationValue, alert.DurationUnit, "Minutes");
+        alert.DurationUnit = "Minutes";
         
         var linksArray = valueElement.GetProperty("definition").GetProperty("links").EnumerateArray();
         if (linksArray.Any())
