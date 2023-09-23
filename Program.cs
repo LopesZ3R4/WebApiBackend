@@ -30,15 +30,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = string.Empty;
+
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
+else
+{
+    connectionString = builder.Configuration.GetConnectionString("FallbackConnection");
+}
+
 try
 {
     using var connection = new SqlConnection(connectionString);
     connection.Open();
 }
-catch
+catch (Exception ex)
 {
-    connectionString = builder.Configuration.GetConnectionString("FallbackConnection");
+    Console.WriteLine($"An error occurred while trying to open the connection: {ex.Message}");
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
