@@ -42,12 +42,14 @@ public class JsonMapper
         alert.DurationType = valueElement.GetProperty("duration").GetProperty("@type").GetString();
         alert.DurationValue = double.Parse(valueElement.GetProperty("duration").GetProperty("valueAsInteger").GetString());
         alert.DurationUnit = valueElement.GetProperty("duration").GetProperty("unit").GetString();
-
-        alert.EngineHoursValue = TimeConversion.ConvertTime(alert.EngineHoursValue, alert.EngineHoursUnit, "Minutes");
-        alert.EngineHoursUnit = "Minutes";
-
-        alert.DurationValue = TimeConversion.ConvertTime(alert.DurationValue, alert.DurationUnit, "Minutes");
-        alert.DurationUnit = "Minutes";
+        if(alert.EngineHoursUnit != "Minutes"){
+            alert.EngineHoursValue = TimeConversion.ConvertTime(alert.EngineHoursValue, alert.EngineHoursUnit, "Minutes");
+            alert.EngineHoursUnit = "Minutes";
+        }
+        if(alert.DurationUnit != "Minutes"){
+            alert.DurationValue = TimeConversion.ConvertTime(alert.DurationValue, alert.DurationUnit, "Minutes");
+            alert.DurationUnit = "Minutes";
+        }
         
         var linksArray = valueElement.GetProperty("definition").GetProperty("links").EnumerateArray();
         if (linksArray.Any())
