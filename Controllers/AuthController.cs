@@ -72,7 +72,7 @@ public class AuthController : ControllerBase
             return Conflict("A user with the same username or email already exists");
         }
 
-        newUser.HashedPassword = _authService.HashPassword(newUser.HashedPassword);
+        newUser.Password = _authService.HashPassword(newUser.Password);
         _userRepository.Add(newUser);
 
         return Ok();

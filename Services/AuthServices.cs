@@ -26,7 +26,7 @@ namespace Services {
 
         var hashedPassword = HashPassword(password);
 
-        return hashedPassword == user.HashedPassword;
+        return hashedPassword == user.Password;
     }
 
     public string HashPassword(string password)
