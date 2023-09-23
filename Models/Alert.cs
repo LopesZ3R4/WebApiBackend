@@ -53,7 +53,6 @@ public class Definition
     public string? SourceAddress { get; set; }
     public string? ThreeLetterAcronym { get; set; }
     public string? Description { get; set; }
-    //public List<Link> Links { get; set; }
     [ForeignKey("AlertId")]
     public Alert Alert { get; set; }
 }

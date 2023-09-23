@@ -39,7 +39,6 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        // Generate token
         var token = new JwtSecurityToken
         (
             issuer: _configuration["Jwt:Issuer"],
@@ -53,7 +52,6 @@ public class AuthController : ControllerBase
 
         var user = _userRepository.Get(request.Username);
 
-        // Assign token to user and save changes
         user.Token = tokenString;
         _userRepository.Update(user);
 

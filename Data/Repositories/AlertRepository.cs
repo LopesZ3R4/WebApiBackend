@@ -11,7 +11,10 @@ public class AlertRepository
     {
         _context = context;
     }
-
+    public Alert? Get(int Id)
+        {
+            return _context.Alerts.FirstOrDefault(u => u.Id == Id);
+        }
     public async Task<List<Alert>> GetAllAlertsAsync()
     {
         return await _context.Alerts.ToListAsync();
@@ -21,5 +24,31 @@ public class AlertRepository
     {
         _context.Alerts.Add(alert);
         await _context.SaveChangesAsync();
+    }
+    public async Task<List<Alert>> GetAllAlertsAsync(string? type = null, string? color = null, string? severity = null, DateTime? date = null)
+    {
+        var query = _context.Alerts.AsQueryable();
+
+        if (!string.IsNullOrEmpty(type))
+        {
+            query = query.Where(a => a.Type == type);
+        }
+
+        if (!string.IsNullOrEmpty(color))
+        {
+            query = query.Where(a => a.Color == color);
+        }
+
+        if (!string.IsNullOrEmpty(severity))
+        {
+            query = query.Where(a => a.Severity == severity);
+        }
+
+        if (date.HasValue)
+        {
+            query = query.Where(a => a.Time.HasValue && a.Time.Value.Date == date.Value.Date);
+        }
+
+        return await query.ToListAsync();
     }
 }

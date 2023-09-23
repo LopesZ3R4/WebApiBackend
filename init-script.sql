@@ -1,4 +1,3 @@
--- Enable xp_cmdshell
 EXEC sp_configure 'show advanced options', 1;
 GO
 RECONFIGURE;
@@ -7,28 +6,28 @@ EXEC sp_configure 'xp_cmdshell', 1;
 GO
 RECONFIGURE;
 GO
--- Create database
+
 PRINT 'Creating database...'
 CREATE DATABASE bd;
 GO
 
 PRINT 'Setting database as current...'
--- Set database as current
+
 USE bd;
 GO
 
 PRINT 'Creating admin user...'
--- Create admin user
+
 CREATE LOGIN adm WITH PASSWORD = '@Admin1234';
 GO
 
 PRINT 'Granting sysadmin role to admin user...'
--- Grant sysadmin role to admin user
+
 ALTER SERVER ROLE sysadmin ADD MEMBER adm;
 GO
 
 PRINT 'Creating Users table...'
--- Create Users table
+
 CREATE TABLE Users
 (
     Id INT IDENTITY(1,1) PRIMARY KEY,
@@ -41,8 +40,9 @@ CREATE TABLE Users
 CREATE INDEX idx_username ON Users (Username);
 CREATE INDEX idx_email ON Users (Email);
 
+INSERT INTO Users (Username,HashedPassword,UserType,Email) values ('admin','34b9b7e38c513dd5b4001aa7b2f05f15444c7c520d5b851b28ef22e462811cc9','Admin','admin@sou.br');
+go
 
--- File Path: ./init-script.sql
 CREATE TABLE Alerts (
     Id Int PRIMARY KEY,
     Type NVARCHAR(50),
@@ -72,6 +72,12 @@ CREATE TABLE Alerts (
     DefinitionLinkRel NVARCHAR(50),
     DefinitionLinkUri NVARCHAR(255) 
 );
+
+CREATE INDEX IDX_AlertsID ON Alerts (Id);
+CREATE INDEX IDX_Alerts_Type ON Alerts (Type);
+CREATE INDEX IDX_Alerts_Color ON Alerts (Color);
+CREATE INDEX IDX_Alerts_Severity ON Alerts (Severity);
+CREATE INDEX IDX_Alerts_Time ON Alerts (Time);
 
 CREATE TABLE Definitions (
     AlertId Int PRIMARY KEY,

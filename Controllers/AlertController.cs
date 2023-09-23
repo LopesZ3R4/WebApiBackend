@@ -28,26 +28,22 @@ public class AlertController : ControllerBase
 
         foreach (var alert in alertData.Values)
         {
-            await _alertRepository.AddAlertAsync(alert);
+            var existingAlert = _alertRepository.Get(alert.Id);
+
+            if (existingAlert == null)
+            {
+                await _alertRepository.AddAlertAsync(alert);
+            }
         }
 
         return Ok();
     }
     
     [HttpGet("GetAlerts")]
-    public async Task<IActionResult> GetAlerts(string? type = null, string? color = null)
+    public async Task<IActionResult> GetAlerts(string? type = null, string? color = null, string? severity = null, DateTime? date = null)
     {
-        var alerts = await _alertRepository.GetAllAlertsAsync();
+        var alerts = await _alertRepository.GetAllAlertsAsync(type, color, severity, date);
 
-        if (!string.IsNullOrEmpty(type))
-        {
-            alerts = alerts.Where(a => a.Type == type).ToList();
-        }
-
-        if (!string.IsNullOrEmpty(color))
-        {
-            alerts = alerts.Where(a => a.Color == color).ToList();
-        }
         var response = new 
         {
             count = alerts.Count,
