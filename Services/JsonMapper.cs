@@ -6,8 +6,10 @@ public class JsonMapper
 {
     public AlertData MapJsonToAlertData(JsonElement jsonElement)
     {
-        var alertData = new AlertData();
-        alertData.Values = new List<Alert>();
+        var alertData = new AlertData
+        {
+            Values = new List<Alert>()
+        };
 
         var valuesElement = jsonElement.GetProperty("values");
         foreach (var valueElement in valuesElement.EnumerateArray())
