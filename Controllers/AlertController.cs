@@ -29,8 +29,9 @@ public class AlertController : ControllerBase
         foreach (var alert in alertData.Values)
         {
             var existingAlert = _alertRepository.Exists(alert.Id);
+            Console.WriteLine($"Buscando pela existencia do alerta: {alert.Id}, resultado: {existingAlert}");
 
-            if (existingAlert)
+            if (!existingAlert)
             {
                 await _alertRepository.AddAlertAsync(alert);
             }
@@ -40,13 +41,14 @@ public class AlertController : ControllerBase
     }
     
     [HttpGet("GetAlerts")]
-    public async Task<IActionResult> GetAlerts(string? type = null, string? color = null, string? severity = null, DateTime? date = null)
+    public async Task<IActionResult> GetAlerts(int pageNumber = 1, int pageSize = 10, string? type = null, string? color = null, string? severity = null, DateTime? date = null)
     {
-        var alerts = await _alertRepository.GetAllAlertsAsync(type, color, severity, date);
+        var (alerts,hasMore) = await _alertRepository.GetAllAlertsAsync(pageNumber, pageSize, type, color, severity, date);
 
         var response = new 
         {
             count = alerts.Count,
+            hasMore,
             alerts
         };
 

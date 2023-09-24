@@ -25,7 +25,7 @@ public class AlertRepository
         _context.Alerts.Add(alert);
         await _context.SaveChangesAsync();
     }
-    public async Task<List<Alert>> GetAllAlertsAsync(string? type = null, string? color = null, string? severity = null, DateTime? date = null)
+    public async Task<(List<Alert>,bool hasMore)> GetAllAlertsAsync(int pageNumber = 1, int pageSize = 10, string? type = null, string? color = null, string? severity = null, DateTime? date = null)
     {
         var query = _context.Alerts.AsQueryable();
 
@@ -48,7 +48,14 @@ public class AlertRepository
         {
             query = query.Where(a => a.Time.HasValue && a.Time.Value.Date == date.Value.Date);
         }
+        var totalCount = await query.CountAsync();
 
-        return await query.ToListAsync();
+        query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        var hasMore = (pageNumber * pageSize) < totalCount;
+        
+        var alerts = await query.ToListAsync();
+
+        return (alerts, hasMore);
     }
 }
