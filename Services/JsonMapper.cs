@@ -22,29 +22,30 @@ public class JsonMapper
     }
     public Alert MapJsonToAlert(JsonElement valueElement)
     {
-        var alert = new Alert();
-
-        alert.Type = valueElement.GetProperty("@type").GetString();
-        alert.Occurrences = valueElement.GetProperty("occurrences").GetString();
-        alert.EngineHoursType = valueElement.GetProperty("engineHours").GetProperty("@type").GetString();
-        alert.EngineHoursUnit = valueElement.GetProperty("engineHours").GetProperty("reading").GetProperty("unit").GetString();
-        alert.EngineHoursValue = valueElement.GetProperty("engineHours").GetProperty("reading").GetProperty("valueAsDouble").GetDouble();
-        alert.MachineLinearTime = valueElement.GetProperty("machineLinearTime").GetInt32();
-        alert.Bus = int.Parse(valueElement.GetProperty("bus").GetString());
-        alert.Id = int.Parse(valueElement.GetProperty("id").GetString());
-        alert.Time = DateTime.Parse(valueElement.GetProperty("time").GetString());
-        alert.LocationType = valueElement.GetProperty("location").GetProperty("@type").GetString();
-        alert.Lat = valueElement.GetProperty("location").GetProperty("lat").GetDouble();
-        alert.Lon = valueElement.GetProperty("location").GetProperty("lon").GetDouble();
-        alert.Color = valueElement.GetProperty("color").GetString();
-        alert.Severity = valueElement.GetProperty("severity").GetString();
-        alert.AcknowledgementStatus = valueElement.GetProperty("acknowledgementStatus").GetString();
-        alert.Ignored = valueElement.GetProperty("ignored").GetBoolean();
-        alert.Invisible = valueElement.GetProperty("invisible").GetBoolean();
-        alert.DurationType = valueElement.GetProperty("duration").GetProperty("@type").GetString();
-        alert.DurationValue = double.Parse(valueElement.GetProperty("duration").GetProperty("valueAsInteger").GetString());
-        alert.DurationUnit = valueElement.GetProperty("duration").GetProperty("unit").GetString();
-        if(alert.EngineHoursUnit != "Minutes"){
+        var alert = new Alert
+        {
+            Type = valueElement.GetProperty("@type").GetString(),
+            Occurrences = valueElement.GetProperty("occurrences").GetString(),
+            EngineHoursType = valueElement.GetProperty("engineHours").GetProperty("@type").GetString(),
+            EngineHoursUnit = valueElement.GetProperty("engineHours").GetProperty("reading").GetProperty("unit").GetString(),
+            EngineHoursValue = valueElement.GetProperty("engineHours").GetProperty("reading").GetProperty("valueAsDouble").GetDouble(),
+            MachineLinearTime = valueElement.GetProperty("machineLinearTime").GetInt32(),
+            Bus = int.Parse(valueElement.GetProperty("bus").GetString()),
+            Id = int.Parse(valueElement.GetProperty("id").GetString()),
+            Time = DateTime.Parse(valueElement.GetProperty("time").GetString()),
+            LocationType = valueElement.GetProperty("location").GetProperty("@type").GetString(),
+            Lat = valueElement.GetProperty("location").GetProperty("lat").GetDouble(),
+            Lon = valueElement.GetProperty("location").GetProperty("lon").GetDouble(),
+            Color = valueElement.GetProperty("color").GetString(),
+            Severity = valueElement.GetProperty("severity").GetString(),
+            AcknowledgementStatus = valueElement.GetProperty("acknowledgementStatus").GetString(),
+            Ignored = valueElement.GetProperty("ignored").GetBoolean(),
+            Invisible = valueElement.GetProperty("invisible").GetBoolean(),
+            DurationType = valueElement.GetProperty("duration").GetProperty("@type").GetString(),
+            DurationValue = double.Parse(valueElement.GetProperty("duration").GetProperty("valueAsInteger").GetString()),
+            DurationUnit = valueElement.GetProperty("duration").GetProperty("unit").GetString()
+        };
+        if (alert.EngineHoursUnit != "Minutes"){
             alert.EngineHoursValue = TimeConversion.ConvertTime(alert.EngineHoursValue, alert.EngineHoursUnit, "Minutes");
             alert.EngineHoursUnit = "Minutes";
         }
