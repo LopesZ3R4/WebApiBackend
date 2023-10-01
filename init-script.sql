@@ -70,7 +70,15 @@ CREATE TABLE Alerts (
     LinkUri NVARCHAR(255),
     DefinitionLinkType NVARCHAR(50),
     DefinitionLinkRel NVARCHAR(50),
-    DefinitionLinkUri NVARCHAR(255) 
+    DefinitionLinkUri NVARCHAR(255),
+    DefinitionId Int,
+    DefinitionType NVARCHAR(50),
+    DefinitionSuspectParameterName NVARCHAR(50),
+    DefinitionFailureModeIndicator NVARCHAR(50),
+    DefinitionBus Int,
+    DefinitionSourceAddress NVARCHAR(50),
+    DefinitionThreeLetterAcronym NVARCHAR(50),
+    DefinitionDescription NVARCHAR(MAX),
 );
 
 CREATE INDEX IDX_AlertsID ON Alerts (Id);
@@ -78,20 +86,5 @@ CREATE INDEX IDX_Alerts_Type ON Alerts (Type);
 CREATE INDEX IDX_Alerts_Color ON Alerts (Color);
 CREATE INDEX IDX_Alerts_Severity ON Alerts (Severity);
 CREATE INDEX IDX_Alerts_Time ON Alerts (Time);
-
-CREATE TABLE Definitions (
-    AlertId Int PRIMARY KEY,
-    Id Int,
-    Type NVARCHAR(50),
-    SuspectParameterName NVARCHAR(50),
-    FailureModeIndicator NVARCHAR(50),
-    Bus Int,
-    SourceAddress NVARCHAR(50),
-    ThreeLetterAcronym NVARCHAR(50),
-    Description NVARCHAR(MAX),
-    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
-);
-
-CREATE INDEX IDX_Definitions_AlertId ON Definitions (AlertId);
 
 PRINT 'Initialization script completed successfully.'

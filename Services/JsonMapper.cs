@@ -21,7 +21,8 @@ public class JsonMapper
         return alertData;
     }
     public Alert MapJsonToAlert(JsonElement valueElement)
-    {
+    {   
+        var definitionElement = valueElement.GetProperty("definition");
         var alert = new Alert
         {
             Type = valueElement.GetProperty("@type").GetString(),
@@ -43,7 +44,15 @@ public class JsonMapper
             Invisible = valueElement.GetProperty("invisible").GetBoolean(),
             DurationType = valueElement.GetProperty("duration").GetProperty("@type").GetString(),
             DurationValue = double.Parse(valueElement.GetProperty("duration").GetProperty("valueAsInteger").GetString()),
-            DurationUnit = valueElement.GetProperty("duration").GetProperty("unit").GetString()
+            DurationUnit = valueElement.GetProperty("duration").GetProperty("unit").GetString(),
+            DefinitionType = definitionElement.GetProperty("@type").GetString(),
+            DefinitionSuspectParameterName = definitionElement.GetProperty("suspectParameterName").GetString(),
+            DefinitionFailureModeIndicator = definitionElement.GetProperty("failureModeIndicator").GetString(),
+            DefinitionBus = int.Parse(definitionElement.GetProperty("bus").GetString()),
+            DefinitionSourceAddress = definitionElement.GetProperty("sourceAddress").GetString(),
+            DefinitionThreeLetterAcronym = definitionElement.GetProperty("threeLetterAcronym").GetString(),
+            DefinitionId = int.Parse(definitionElement.GetProperty("id").GetString()),
+            DefinitionDescription = definitionElement.GetProperty("description").GetString()
         };
         if (alert.EngineHoursUnit != "Minutes"){
             alert.EngineHoursValue = TimeConversion.ConvertTime(alert.EngineHoursValue, alert.EngineHoursUnit, "Minutes");
@@ -71,21 +80,6 @@ public class JsonMapper
             alert.LinkRel = firstAlertLinkElement.GetProperty("rel").GetString();
             alert.LinkUri = firstAlertLinkElement.GetProperty("uri").GetString();
         }
-
-        var definitionElement = valueElement.GetProperty("definition");
-        alert.Definition = new Definition
-        {
-            AlertId = int.Parse(valueElement.GetProperty("id").GetString()),
-            Type = definitionElement.GetProperty("@type").GetString(),
-            SuspectParameterName = definitionElement.GetProperty("suspectParameterName").GetString(),
-            FailureModeIndicator = definitionElement.GetProperty("failureModeIndicator").GetString(),
-            Bus = int.Parse(definitionElement.GetProperty("bus").GetString()),
-            SourceAddress = definitionElement.GetProperty("sourceAddress").GetString(),
-            ThreeLetterAcronym = definitionElement.GetProperty("threeLetterAcronym").GetString(),
-            Id = int.Parse(definitionElement.GetProperty("id").GetString()),
-            Description = definitionElement.GetProperty("description").GetString()
-        };
-
         return alert;
     }
 }

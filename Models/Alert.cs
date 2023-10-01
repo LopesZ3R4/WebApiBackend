@@ -20,7 +20,6 @@ public class Alert
     public string? EngineHoursUnit { get; set; }
     public int MachineLinearTime { get; set; }
     public int? Bus { get; set; }
-    public Definition? Definition { get; set; }
     public DateTime? Time { get; set; }
     public string? LocationType { get; set; }
     public double Lat { get; set; }
@@ -38,21 +37,12 @@ public class Alert
     public string? DefinitionLinkType { get; set; }
     public string? DefinitionLinkRel { get; set; }
     public string? DefinitionLinkUri { get; set; }
-}
-[Table("Definitions")]
-public class Definition
-{
-    [Key]
-    public int AlertId { get; set; }
-    [JsonProperty(PropertyName = "@type")]
-    public int? Id { get; set;}
-    public string? Type { get; set; }
-    public string? SuspectParameterName { get; set; }
-    public string? FailureModeIndicator { get; set; }
-    public int? Bus { get; set; }
-    public string? SourceAddress { get; set; }
-    public string? ThreeLetterAcronym { get; set; }
-    public string? Description { get; set; }
-    [ForeignKey("AlertId")]
-    public Alert Alert { get; set; }
+    public string? DefinitionType { get; set; }
+    public string? DefinitionSuspectParameterName { get; set; }
+    public string? DefinitionFailureModeIndicator { get; set; }
+    public int DefinitionBus { get; set; }
+    public string? DefinitionSourceAddress { get; set; }
+    public string? DefinitionThreeLetterAcronym { get; set; }
+    public int DefinitionId { get; set; }
+    public string? DefinitionDescription { get; set; }
 }
