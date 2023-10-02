@@ -55,7 +55,6 @@ CREATE TABLE Alerts (
     EngineHoursUnit NVARCHAR(50),
     MachineLinearTime INT,
     Bus Int,
-    DefinitionId Int,
     Time DATETIME,
     LocationType NVARCHAR(50),
     Lat FLOAT,

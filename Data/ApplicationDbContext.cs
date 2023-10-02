@@ -9,5 +9,4 @@ public class ApplicationDbContext : DbContext
     }
     public DbSet<User> Users { get; set; }
     public DbSet<Alert> Alerts { get; set; }
-    public DbSet<Definition> Definitions { get; set; }
 }
