@@ -86,4 +86,22 @@ CREATE INDEX IDX_Alerts_Color ON Alerts (Color);
 CREATE INDEX IDX_Alerts_Severity ON Alerts (Severity);
 CREATE INDEX IDX_Alerts_Time ON Alerts (Time);
 
+CREATE TABLE Encaminhamento
+(
+    IdEncaminhamento INT IDENTITY(1,1) PRIMARY KEY,
+    AlertId INT,
+    IdUsuario NVARCHAR(255),
+    Motivo NVARCHAR(MAX),
+    IdEmpresa INT,
+    EncaminhamentoAtivo BIT,
+    DataInclusao DATETIME,
+    DataAlteracao DATETIME,
+    UsuarioInc NVARCHAR(255),
+    UsuarioAlt NVARCHAR(255),
+    OrigemRetorno INT,
+    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
+);
+CREATE INDEX IDX_Encaminhamento ON Encaminhamento (IdEncaminhamento);
+CREATE INDEX IDX_Encaminhamento_AlertID ON Encaminhamento (AlertId);
+
 PRINT 'Initialization script completed successfully.'
