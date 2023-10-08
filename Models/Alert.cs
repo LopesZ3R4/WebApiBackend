@@ -45,4 +45,6 @@ public class Alert
     public string? DefinitionThreeLetterAcronym { get; set; }
     public int DefinitionId { get; set; }
     public string? DefinitionDescription { get; set; }
+    [ForeignKey("IdMachine")]
+    public Machine Machine { get; set; }
 }

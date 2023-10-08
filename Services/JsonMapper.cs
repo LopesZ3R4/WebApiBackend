@@ -82,4 +82,60 @@ public class JsonMapper
         }
         return alert;
     }
+
+    //Machine
+    public MachineData MapJsonToMachineData(JsonElement jsonElement)
+    {
+        var machineData = new MachineData
+        {
+            Values = new List<Machine>()
+        };
+
+        var valuesElement = jsonElement.GetProperty("values");
+        foreach (var valueElement in valuesElement.EnumerateArray())
+        {
+            var machine = MapJsonToMachine(valueElement);
+            machineData.Values.Add(machine);
+        }
+
+        return machineData;
+    }
+
+    public Machine MapJsonToMachine(JsonElement valueElement)
+    {
+        var definitionElement = valueElement.GetProperty("definition");
+        var machine = new Machine
+        {
+            IdMachine = int.Parse(valueElement.GetProperty("id").GetString()),
+            VisualizationCategory = valueElement.GetProperty("visualizationCategory").GetString(),
+            MachineCategories = valueElement.GetProperty("machineCategories").GetString(),    
+            Category = valueElement.GetProperty("category").GetString(),
+            Make = valueElement.GetProperty("make").GetString(),
+            Model = valueElement.GetProperty("model").GetString(),
+            DetailMachineCode = valueElement.GetProperty("detailMachineCode").GetString(),
+            Type = valueElement.GetProperty("type").GetString(),
+            ProductKey = int.Parse(definitionElement.GetProperty("productKey").GetString()),
+            EngineSerialNumber = valueElement.GetProperty("engineSerialNumber").GetString(),
+            TelematicsState = valueElement.GetProperty("telematicsState").GetString(),
+            Capabilities = valueElement.GetProperty("capabilities").GetString(),
+            Terminals = valueElement.GetProperty("terminals").GetString(),
+            Display = valueElement.GetProperty("display").GetString(),
+            Guid = valueElement.GetProperty("GUID").GetString(),
+            ModelYear = int.Parse(definitionElement.GetProperty("modelYear").GetString()),
+            Vin = valueElement.GetProperty("vin").GetString(),
+            ExternalId = int.Parse(definitionElement.GetProperty("externalId").GetString()),
+            Name = valueElement.GetProperty("name").GetString(),
+        };
+
+        var machineLinksArray = valueElement.GetProperty("links").EnumerateArray();
+        if (alertLinksArray.Any())
+        {
+            var firstAlertLinkElement = alertLinksArray.First();
+            machine.LinkType = firstAlertLinkElement.GetProperty("@type").GetString();
+            machine.LinkRel = firstAlertLinkElement.GetProperty("rel").GetString();
+            machine.LinkUri = firstAlertLinkElement.GetProperty("uri").GetString();
+        }
+
+        return machine;
+    }
 }
