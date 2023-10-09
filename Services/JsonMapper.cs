@@ -82,8 +82,6 @@ public class JsonMapper
         }
         return alert;
     }
-
-    //Machine
     public MachineData MapJsonToMachineData(JsonElement jsonElement)
     {
         var machineData = new MachineData
@@ -106,7 +104,7 @@ public class JsonMapper
         var definitionElement = valueElement.GetProperty("definition");
         var machine = new Machine
         {
-            IdMachine = int.Parse(valueElement.GetProperty("id").GetString()),
+            Id = int.Parse(valueElement.GetProperty("id").GetString()),
             VisualizationCategory = valueElement.GetProperty("visualizationCategory").GetString(),
             MachineCategories = valueElement.GetProperty("machineCategories").GetString(),    
             Category = valueElement.GetProperty("category").GetString(),
@@ -126,16 +124,6 @@ public class JsonMapper
             ExternalId = int.Parse(definitionElement.GetProperty("externalId").GetString()),
             Name = valueElement.GetProperty("name").GetString(),
         };
-
-        var machineLinksArray = valueElement.GetProperty("links").EnumerateArray();
-        if (alertLinksArray.Any())
-        {
-            var firstAlertLinkElement = alertLinksArray.First();
-            machine.LinkType = firstAlertLinkElement.GetProperty("@type").GetString();
-            machine.LinkRel = firstAlertLinkElement.GetProperty("rel").GetString();
-            machine.LinkUri = firstAlertLinkElement.GetProperty("uri").GetString();
-        }
-
         return machine;
     }
 }

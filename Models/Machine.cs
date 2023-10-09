@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Machine
 {
     [Key]
-    public int IdMachine { get; set; }
+    public int Id { get; set; }
     public string? VisualizationCategory { get; set; }
     public string? MachineCategories { get; set; }
     public string? Category { get; set; }
@@ -25,4 +25,5 @@ public class Machine
     public string? Vin { get; set; }
     public int? ExternalId { get; set; }
     public string? Name { get; set; }
+    public string? Display { get; set; }
 }
