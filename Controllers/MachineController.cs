@@ -13,10 +13,12 @@ using System.Text.Json;
 public class MachineController : ControllerBase
 {
     private readonly MachineRepository _MachineRepository;
+    private readonly AlertRepository _alertRepository;
 
-    public MachineController(MachineRepository MachineRepository)
+    public MachineController(MachineRepository MachineRepository, AlertRepository alertRepository)
     {
         _MachineRepository = MachineRepository;
+        _alertRepository = alertRepository;
     }
 
     [HttpPost("Create")]
@@ -54,5 +56,37 @@ public class MachineController : ControllerBase
         var json = JsonSerializer.Serialize(response);
 
         return Ok(json);
+    }
+    public async Task<IActionResult> GetMachineAlerts()
+    {
+        var machines = await _MachineRepository.GetAllMachinesAsync();
+        var httpClient = new HttpClient();
+        var machineAlerts = new Dictionary<int, List<Alert>>();
+        var jsonMapper = new JsonMapper();
+
+        foreach (var machine in machines)
+        {
+            var response = await httpClient.GetAsync($"https://sandboxapi.deere.com/platform/machines/{machine.Id}/alerts");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var jsonElement = JsonDocument.Parse(content).RootElement;
+                var alertData = jsonMapper.MapJsonToAlertData(jsonElement);
+
+                foreach (var alert in alertData.Values)
+                {
+                    var existingAlert = _alertRepository.Exists(alert.Id);
+                    Console.WriteLine($"Buscando pela existencia do alerta: {alert.Id}, resultado: {existingAlert}");
+
+                    if (!existingAlert)
+                    {
+                        await _alertRepository.AddAlertAsync(alert);
+                    }
+                }
+            }
+        }
+
+        return Ok(machineAlerts);
     }
 }
