@@ -43,8 +43,36 @@ CREATE INDEX idx_email ON Users (Email);
 INSERT INTO Users (Username,Password,UserType,Email) values ('admin','34b9b7e38c513dd5b4001aa7b2f05f15444c7c520d5b851b28ef22e462811cc9','Admin','admin@sou.br');
 go
 
+CREATE TABLE Machines (
+    Id INT PRIMARY KEY,
+    ClientId INT,
+    VisualizationCategory NVARCHAR(MAX),
+    MachineCategories NVARCHAR(MAX),
+    Category NVARCHAR(MAX),
+    Make NVARCHAR(MAX),
+    Model NVARCHAR(MAX),
+    DetailMachineCode NVARCHAR(MAX),
+    [Type] NVARCHAR(MAX),
+    ProductKey INT,
+    EngineSerialNumber NVARCHAR(MAX),
+    TelematicsState NVARCHAR(MAX),
+    Capabilities NVARCHAR(MAX),
+    Terminals NVARCHAR(MAX),
+    Displays NVARCHAR(MAX),
+    [Guid] NVARCHAR(MAX),
+    ModelYear INT,
+    Vin NVARCHAR(MAX),
+    ExternalId INT,
+    Name NVARCHAR(MAX),
+    Display NVARCHAR(MAX)
+);
+
+CREATE INDEX IDX_Machines ON Machines (Id);
+CREATE INDEX IDX_Machines_ClienteID ON Machines (ClientId);
+
 CREATE TABLE Alerts (
     Id Int PRIMARY KEY,
+    MachineId int,
     Type NVARCHAR(50),
     DurationType NVARCHAR(50),
     DurationValue FLOAT,
@@ -78,6 +106,7 @@ CREATE TABLE Alerts (
     DefinitionSourceAddress NVARCHAR(50),
     DefinitionThreeLetterAcronym NVARCHAR(50),
     DefinitionDescription NVARCHAR(MAX),
+    FOREIGN KEY (MachineId) REFERENCES Machine (Id)
 );
 
 CREATE INDEX IDX_AlertsID ON Alerts (Id);
@@ -101,7 +130,140 @@ CREATE TABLE Encaminhamento
     OrigemRetorno INT,
     FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
 );
+
 CREATE INDEX IDX_Encaminhamento ON Encaminhamento (IdEncaminhamento);
 CREATE INDEX IDX_Encaminhamento_AlertID ON Encaminhamento (AlertId);
+
+-- Inserindo o primeiro conjunto de dados
+INSERT INTO Alerts (Id, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
+VALUES (
+    '123456789', 
+    'DiagnosticTroubleCodeAlert', 
+    'measurementAsInteger', 
+    '3', 
+    'Seconds', 
+    '1', 
+    'EngineHours', 
+    '668.25', 
+    'Hours', 
+    '36951157', 
+    '0', 
+    '2020-05-13T19:15:11.000Z', 
+    'Point', 
+    '41.123456', 
+    '-90.234567', 
+    'BLUE', 
+    'INFO', 
+    'N', 
+    0, 
+    0, 
+    'Link', 
+    'machine', 
+    'https://sandboxapi.deere.com/platform/machines/123456', 
+    'Link', 
+    'self', 
+    'https://sandboxapi.deere.com/platform/api/alertTypes/diagnosticTroubleCodeAlert/definitions/1328105', 
+    '1234567', 
+    'DiagnosticTroubleCodeAlertDefinition', 
+    '524019', 
+    '31', 
+    '0', 
+    '140', 
+    'AIC', 
+    'Other AIC 524019.31 Reverser lever left in incorrect position. - Return to park to attempt recovery.'
+);
+
+-- Inserindo o segundo conjunto de dados
+INSERT INTO Alerts (Id, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
+VALUES (
+    '123456790', 
+    'DiagnosticTroubleCodeAlert', 
+    'measurementAsInteger', 
+    '5', 
+    'Seconds', 
+    '2', 
+    'EngineHours', 
+    '670.50', 
+    'Hours', 
+    '36951159', 
+    '1', 
+    '2020-05-13T19:16:11.000Z', 
+    'Point', 
+    '41.123457', 
+    '-90.234568', 
+    'RED', 
+    'WARNING', 
+    'N', 
+    0, 
+    0, 
+    'Link', 
+    'machine', 
+    'https://sandboxapi.deere.com/platform/machines/123457', 
+    'Link', 
+    'self', 
+    'https://sandboxapi.deere.com/platform/api/alertTypes/diagnosticTroubleCodeAlert/definitions/1328106', 
+    '1234568', 
+    'DiagnosticTroubleCodeAlertDefinition', 
+    '524020', 
+    '32', 
+    '1', 
+    '141', 
+    'AID', 
+    'Other AID 524020.32 Reverser lever right in incorrect position. - Return to park to attempt recovery.'
+);
+
+-- Inserindo o terceiro conjunto de dados
+INSERT INTO Alerts (Id, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
+VALUES (
+    '123456791', 
+    'DiagnosticTroubleCodeAlert', 
+    'measurementAsInteger', 
+    '7', 
+    'Seconds', 
+    '3', 
+    'EngineHours', 
+    '672.75', 
+    'Hours', 
+    '36951161', 
+    '2', 
+    '2020-05-13T19:17:11.000Z', 
+    'Point', 
+    '41.123458', 
+    '-90.234569', 
+    'YELLOW', 
+    'CRITICAL', 
+    'N', 
+    0, 
+    0, 
+    'Link', 
+    'machine', 
+    'https://sandboxapi.deere.com/platform/machines/123458', 
+    'Link', 
+    'self', 
+    'https://sandboxapi.deere.com/platform/api/alertTypes/diagnosticTroubleCodeAlert/definitions/1328107', 
+    '1234569', 
+    'DiagnosticTroubleCodeAlertDefinition', 
+    '524021', 
+    '33', 
+    '2', 
+    '142', 
+    'AIE', 
+    'Other AIE 524021.33 Reverser lever up in incorrect position. - Return to park to attempt recovery.'
+);
+
+-- Inserindo um encaminhamento para o primeiro alerta com o usuário "admin"
+INSERT INTO Encaminhamento (AlertId, IdUsuario, Motivo, IdEmpresa, EncaminhamentoAtivo, DataInclusao, DataAlteracao, UsuarioInc, UsuarioAlt, OrigemRetorno)
+VALUES (
+    123456789, -- Substitua pelo ID do primeiro alerta inserido
+    'admin',
+    'Motivo do Encaminhamento',
+    1, -- Substitua pelo ID da empresa
+    1, -- EncaminhamentoAtivo (1 para ativo, 0 para inativo)
+    GETDATE(), -- Data de inclusão (data atual)
+    GETDATE(), -- Data de alteração (data atual)
+    'admin', -- Usuário de inclusão
+    'admin', -- Usuário de alteração
+    1 -- Origem do retorno (substitua pelo valor apropriado)
+);
 
 PRINT 'Initialization script completed successfully.'

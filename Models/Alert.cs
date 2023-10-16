@@ -8,6 +8,9 @@ public class Alert
 {   
     [Key]
     public int Id { get; set; }
+    public int MachineId { get; set; }
+    [ForeignKey("MachineId")]
+    public Machine Machine { get; set; }
     [JsonProperty(PropertyName = "@type")]
     public string? Type { get; set; }
     [JsonProperty(PropertyName = "@type")]
@@ -45,6 +48,4 @@ public class Alert
     public string? DefinitionThreeLetterAcronym { get; set; }
     public int DefinitionId { get; set; }
     public string? DefinitionDescription { get; set; }
-    [ForeignKey("IdMachine")]
-    public Machine Machine { get; set; }
 }
