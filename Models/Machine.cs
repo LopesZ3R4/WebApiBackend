@@ -7,6 +7,7 @@ public class Machine
 {
     [Key]
     public int Id { get; set; }
+    public int ClientId { get; set; }
     public string? VisualizationCategory { get; set; }
     public string? MachineCategories { get; set; }
     public string? Category { get; set; }
