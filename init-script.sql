@@ -130,17 +130,18 @@ CREATE INDEX IDX_Alerts_Time ON Alerts (Time);
 CREATE TABLE Encaminhamento
 (
     IdEncaminhamento INT IDENTITY(1,1) PRIMARY KEY,
-    AlertId INT,
+    AlertId INT NOT NULL,
     IdUsuario NVARCHAR(255),
     Motivo NVARCHAR(MAX),
-    IdEmpresa INT,
+    IdEmpresa INT NOT NULL,
     EncaminhamentoAtivo BIT,
     DataInclusao DATETIME,
     DataAlteracao DATETIME,
     UsuarioInc NVARCHAR(255),
     UsuarioAlt NVARCHAR(255),
     OrigemRetorno INT,
-    FOREIGN KEY (AlertId) REFERENCES Alerts(Id)
+    FOREIGN KEY (AlertId) REFERENCES Alerts(Id),
+    FOREIGN KEY (IdEmpresa) REFERENCES Clients(Id)
 );
 
 CREATE INDEX IDX_Encaminhamento ON Encaminhamento (IdEncaminhamento);
@@ -239,9 +240,10 @@ VALUES (
 );
 
 -- Inserindo o segundo conjunto de dados
-INSERT INTO Alerts (Id, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
+INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
 VALUES (
-    '123456790', 
+    '123456790',
+    1,
     'DiagnosticTroubleCodeAlert', 
     'measurementAsInteger', 
     '5', 
@@ -278,9 +280,10 @@ VALUES (
 );
 
 -- Inserindo o terceiro conjunto de dados
-INSERT INTO Alerts (Id, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
+INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
 VALUES (
-    '123456791', 
+    '123456791',
+    1,
     'DiagnosticTroubleCodeAlert', 
     'measurementAsInteger', 
     '7', 
