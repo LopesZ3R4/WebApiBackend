@@ -10,7 +10,7 @@ public class Alert
     public int Id { get; set; }
     public int MachineId { get; set; }
     [ForeignKey("MachineId")]
-    public Machine Machine { get; set; }
+    public Machine? Machine { get; set; }
     [JsonProperty(PropertyName = "@type")]
     public string? Type { get; set; }
     [JsonProperty(PropertyName = "@type")]

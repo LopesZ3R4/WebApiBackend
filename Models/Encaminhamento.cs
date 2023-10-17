@@ -10,9 +10,9 @@ public class Encaminhamento
     public int IdEncaminhamento { get; set; }
     public int AlertId { get; set; }
     [ForeignKey("AlertId")]
-    public Alert Alert { get; set; }    
+    public Alert? Alert { get; set; }    
     public string? IdUsuario { get; set; }
-    public string Motivo { get; set; }
+    public string? Motivo { get; set; }
     public int IdEmpresa { get; set; }
     public bool? EncaminhamentoAtivo { get; set; }
     public DateTime? DataInclusao { get; set; }

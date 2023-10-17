@@ -2,12 +2,14 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("Machine")]
+[Table("Machines")]
 public class Machine
 {
     [Key]
     public int Id { get; set; }
+    [ForeignKey("ClientId")]
     public int ClientId { get; set; }
+    public Client? Client { get; set; }
     public string? VisualizationCategory { get; set; }
     public string? MachineCategories { get; set; }
     public string? Category { get; set; }
