@@ -43,6 +43,17 @@ CREATE INDEX idx_email ON Users (Email);
 INSERT INTO Users (Username,Password,UserType,Email) values ('admin','34b9b7e38c513dd5b4001aa7b2f05f15444c7c520d5b851b28ef22e462811cc9','Admin','admin@sou.br');
 go
 
+CREATE TABLE Clients
+(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(255) NOT NULL UNIQUE,
+    Address NVARCHAR(MAX),
+    ContactNumber NVARCHAR(50),
+    Email NVARCHAR(255) UNIQUE
+);
+
+CREATE INDEX IDX_Clients ON Clients (Id);
+
 CREATE TABLE Machines (
     Id INT PRIMARY KEY,
     ClientId INT,
@@ -64,7 +75,8 @@ CREATE TABLE Machines (
     Vin NVARCHAR(MAX),
     ExternalId INT,
     Name NVARCHAR(MAX),
-    Display NVARCHAR(MAX)
+    Display NVARCHAR(MAX),
+    FOREIGN KEY (ClientId) REFERENCES Clients (Id)
 );
 
 CREATE INDEX IDX_Machines ON Machines (Id);
@@ -106,7 +118,7 @@ CREATE TABLE Alerts (
     DefinitionSourceAddress NVARCHAR(50),
     DefinitionThreeLetterAcronym NVARCHAR(50),
     DefinitionDescription NVARCHAR(MAX),
-    FOREIGN KEY (MachineId) REFERENCES Machine (Id)
+    FOREIGN KEY (MachineId) REFERENCES Machines (Id)
 );
 
 CREATE INDEX IDX_AlertsID ON Alerts (Id);
@@ -134,10 +146,63 @@ CREATE TABLE Encaminhamento
 CREATE INDEX IDX_Encaminhamento ON Encaminhamento (IdEncaminhamento);
 CREATE INDEX IDX_Encaminhamento_AlertID ON Encaminhamento (AlertId);
 
+INSERT INTO Clients (Name, Address, ContactNumber, Email)
+VALUES ('Rota Oeste', '123 Main St, Anytown, USA', '123-456-7890', 'contact@rotaoeste.com');
+
+INSERT INTO Machines 
+(
+    Id, 
+    ClientId, 
+    VisualizationCategory, 
+    MachineCategories, 
+    Category, 
+    Make, 
+    Model, 
+    DetailMachineCode, 
+    [Type], 
+    ProductKey, 
+    EngineSerialNumber, 
+    TelematicsState, 
+    Capabilities, 
+    Terminals, 
+    Displays, 
+    [Guid], 
+    ModelYear, 
+    Vin, 
+    ExternalId, 
+    Name, 
+    Display
+)
+VALUES 
+(
+    1, -- Id
+    1, -- ClientId
+    'Excavator', -- VisualizationCategory
+    'Construction', -- MachineCategories
+    'Heavy', -- Category
+    'John Deere', -- Make
+    'E360', -- Model
+    'JD360', -- DetailMachineCode
+    'Excavator', -- Type
+    123456, -- ProductKey
+    'ESN123456', -- EngineSerialNumber
+    'Active', -- TelematicsState
+    'GPS, Engine Monitoring', -- Capabilities
+    'Terminal 1', -- Terminals
+    'Display 1', -- Displays
+    'GUID123456', -- Guid
+    2020, -- ModelYear
+    'VIN123456', -- Vin
+    1, -- ExternalId
+    'John Deere E360', -- Name
+    'Display 1' -- Display
+);
+
 -- Inserindo o primeiro conjunto de dados
-INSERT INTO Alerts (Id, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
+INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
 VALUES (
-    '123456789', 
+    '123456789',
+    1,
     'DiagnosticTroubleCodeAlert', 
     'measurementAsInteger', 
     '3', 
@@ -256,7 +321,7 @@ INSERT INTO Encaminhamento (AlertId, IdUsuario, Motivo, IdEmpresa, Encaminhament
 VALUES (
     123456789, -- Substitua pelo ID do primeiro alerta inserido
     'admin',
-    'Motivo do Encaminhamento',
+    'Alerta Vermleho',
     1, -- Substitua pelo ID da empresa
     1, -- EncaminhamentoAtivo (1 para ativo, 0 para inativo)
     GETDATE(), -- Data de inclusão (data atual)

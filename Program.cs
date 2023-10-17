@@ -58,6 +58,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<AlertRepository>();
+builder.Services.AddScoped<ClientRepository>();
+builder.Services.AddScoped<MachineRepository>();
 builder.Services.AddScoped<EncaminhamentoRepository>();
 
 var app = builder.Build();
