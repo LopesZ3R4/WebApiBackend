@@ -52,7 +52,8 @@ public class JsonMapper
             DefinitionSourceAddress = definitionElement.GetProperty("sourceAddress").GetString(),
             DefinitionThreeLetterAcronym = definitionElement.GetProperty("threeLetterAcronym").GetString(),
             DefinitionId = int.Parse(definitionElement.GetProperty("id").GetString()),
-            DefinitionDescription = definitionElement.GetProperty("description").GetString()
+            DefinitionDescription = definitionElement.GetProperty("description").GetString(),
+            Sent = false,
         };
         if (alert.EngineHoursUnit != "Minutes"){
             alert.EngineHoursValue = TimeConversion.ConvertTime(alert.EngineHoursValue, alert.EngineHoursUnit, "Minutes");

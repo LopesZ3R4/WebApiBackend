@@ -118,6 +118,7 @@ CREATE TABLE Alerts (
     DefinitionSourceAddress NVARCHAR(50),
     DefinitionThreeLetterAcronym NVARCHAR(50),
     DefinitionDescription NVARCHAR(MAX),
+    Sent bit DEFAULT 0,
     FOREIGN KEY (MachineId) REFERENCES Machines (Id)
 );
 
