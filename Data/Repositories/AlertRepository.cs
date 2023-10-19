@@ -63,4 +63,17 @@ public class AlertRepository
 
         return (alerts, hasMore);
     }
+    public async Task UpdateAlertSentStatus(int alertId)
+    {
+        var alert = await _context.Alerts.FindAsync(alertId);
+        if (alert != null)
+        {
+            alert.Sent = true;
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception("Alert not found");
+        }
+    }
 }

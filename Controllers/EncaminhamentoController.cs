@@ -9,22 +9,24 @@ using Services;
 public class EncaminhamentoController : ControllerBase
 {
     private readonly EncaminhamentoRepository _repository;
+    private readonly AlertRepository _alertRepository;
     private readonly AuthenticationService _authService;
 
-    public EncaminhamentoController(EncaminhamentoRepository repository, AuthenticationService authService)
+    public EncaminhamentoController(EncaminhamentoRepository repository, AuthenticationService authService, AlertRepository alertRepository)
     {
         _repository = repository;
         _authService = authService;
+        _alertRepository = alertRepository;
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] EncaminhamentoInputModel inputModel)
+    public async Task<IActionResult> PostAsync([FromBody] EncaminhamentoInputModel inputModel)
     {
         var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
         var username = _authService.GetUsernameFromToken(token);
 
         Console.WriteLine($"Usuario: {username}");
-        
+
         var encaminhamento = new Encaminhamento
         {
             AlertId = inputModel.AlertId,
@@ -34,7 +36,13 @@ public class EncaminhamentoController : ControllerBase
             OrigemRetorno = 0,
         };
 
-        _repository.Insert(encaminhamento,username);
+        bool alreadyExists = _repository.ExistsAlert(encaminhamento.AlertId);
+
+        if (alreadyExists)
+        {
+            _repository.Insert(encaminhamento, username);
+            await _alertRepository.UpdateAlertSentStatus(encaminhamento.AlertId);
+        }
         return Ok();
     }
 }

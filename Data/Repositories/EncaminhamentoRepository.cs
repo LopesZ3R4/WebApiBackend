@@ -44,4 +44,8 @@ public class EncaminhamentoRepository
             _context.SaveChanges();
         }
     }
+    public bool ExistsAlert(int AlertID)
+        {
+            return _context.Encaminhamento.Any(u => u.AlertId == AlertID);
+        }
 }
