@@ -39,4 +39,12 @@ public class MachineRepository
 
         return (Machines, hasMore);
     }
+    public async Task<List<string?>> GetDistinctMachineTypes()
+    {
+        return await _context.Machines
+            .Select(m => m.Type)
+            .Distinct()
+            .OrderBy(t => t)
+            .ToListAsync();
+    }
 }

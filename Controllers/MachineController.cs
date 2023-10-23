@@ -57,6 +57,13 @@ public class MachineController : ControllerBase
 
         return Ok(json);
     }
+    [HttpGet("GetMachines/Types")]
+    public async Task<IActionResult> GetMachinesTypes()
+    {
+        var MachinesTypes = await _MachineRepository.GetDistinctMachineTypes();
+        var json = JsonSerializer.Serialize(MachinesTypes);
+        return Ok(json);
+    }
     public async Task<IActionResult> GetMachineAlerts()
     {
         var machines = await _MachineRepository.GetAllMachinesAsync();
