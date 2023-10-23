@@ -25,7 +25,7 @@ public class AlertRepository
         _context.Alerts.Add(alert);
         await _context.SaveChangesAsync();
     }
-    public async Task<(List<Alert>,bool hasMore)> GetAllAlertsAsync(int pageNumber = 1, int pageSize = 10, string? type = null, string? color = null, string? severity = null, DateTime? startDate = null, DateTime? endDate = null)
+    public async Task<(List<Alert>,bool hasMore)> GetAllAlertsAsync(int pageNumber = 1, int pageSize = 10, string? type = null, string? color = null, string? severity = null, DateTime? startDate = null, DateTime? endDate = null, String? machineType = null)
     {
         endDate ??= DateTime.Today;
         var query = _context.Alerts
@@ -51,6 +51,10 @@ public class AlertRepository
         if (startDate.HasValue && endDate.HasValue)
         {
             query = query.Where(a => a.Time.HasValue && a.Time.Value.Date >= startDate.Value.Date && a.Time.Value.Date <= endDate.Value.Date);
+        }
+        if (!string.IsNullOrEmpty(machineType))
+        {
+            query = query.Where(a => a.Machine.Type == machineType);
         }
 
         var totalCount = await query.CountAsync();

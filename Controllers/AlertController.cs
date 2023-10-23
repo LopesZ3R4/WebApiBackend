@@ -41,9 +41,9 @@ public class AlertController : ControllerBase
     }
     
     [HttpGet("GetAlerts")]
-    public async Task<IActionResult> GetAlerts(int pageNumber = 1, int pageSize = 10, string? type = null, string? color = null, string? severity = null, DateTime? startDate = null, DateTime? endDate = null)
+    public async Task<IActionResult> GetAlerts(int pageNumber = 1, int pageSize = 10, string? type = null, string? color = null, string? severity = null, DateTime? startDate = null, DateTime? endDate = null,String? machineType = null)
     {
-        var (alerts,hasMore) = await _alertRepository.GetAllAlertsAsync(pageNumber, pageSize, type, color, severity, startDate, endDate);
+        var (alerts,hasMore) = await _alertRepository.GetAllAlertsAsync(pageNumber, pageSize, type, color, severity, startDate, endDate,machineType);
 
         var response = new 
         {
