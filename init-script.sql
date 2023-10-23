@@ -63,7 +63,7 @@ CREATE TABLE Machines (
     Make NVARCHAR(MAX),
     Model NVARCHAR(MAX),
     DetailMachineCode NVARCHAR(MAX),
-    [Type] NVARCHAR(MAX),
+    [Type] NVARCHAR(255) NOT NULL,
     ProductKey INT,
     EngineSerialNumber NVARCHAR(MAX),
     TelematicsState NVARCHAR(MAX),
@@ -81,6 +81,7 @@ CREATE TABLE Machines (
 
 CREATE INDEX IDX_Machines ON Machines (Id);
 CREATE INDEX IDX_Machines_ClienteID ON Machines (ClientId);
+CREATE INDEX IDX_Machines_Type ON Machines ([Type]);
 
 CREATE TABLE Alerts (
     Id Int PRIMARY KEY,
@@ -151,6 +152,9 @@ CREATE INDEX IDX_Encaminhamento_AlertID ON Encaminhamento (AlertId);
 INSERT INTO Clients (Name, Address, ContactNumber, Email)
 VALUES ('Rota Oeste', '123 Main St, Anytown, USA', '123-456-7890', 'contact@rotaoeste.com');
 
+INSERT INTO Clients (Name, Address, ContactNumber, Email)
+VALUES ('Bom Futuro', '456 Market St, Anytown, USA', '987-654-3210', 'contact@bomfuturo.com');
+
 INSERT INTO Machines 
 (
     Id, 
@@ -199,9 +203,56 @@ VALUES
     'John Deere E360', -- Name
     'Display 1' -- Display
 );
-
+INSERT INTO Machines 
+(
+    Id, 
+    ClientId, 
+    VisualizationCategory, 
+    MachineCategories, 
+    Category, 
+    Make, 
+    Model, 
+    DetailMachineCode, 
+    [Type], 
+    ProductKey, 
+    EngineSerialNumber, 
+    TelematicsState, 
+    Capabilities, 
+    Terminals, 
+    Displays, 
+    [Guid], 
+    ModelYear, 
+    Vin, 
+    ExternalId, 
+    Name, 
+    Display
+)
+VALUES 
+(
+    2,
+    2,
+    'Loader', 
+    'Construction',
+    'Heavy',
+    'John Deere',
+    'L330',
+    'JDL330',
+    'Backhoe Loader',
+    123457,
+    'ESN123457',
+    'Active',
+    'GPS, Engine Monitoring',
+    'Terminal 2',
+    'Display 2',
+    'GUID123457',
+    2021,
+    'VIN123457',
+    2,
+    'John Deere L330',
+    'Display 2'
+);
 -- Inserindo o primeiro conjunto de dados
-INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription)
+INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription,Sent)
 VALUES (
     '123456789',
     1,
@@ -237,7 +288,8 @@ VALUES (
     '0', 
     '140', 
     'AIC', 
-    'Other AIC 524019.31 Reverser lever left in incorrect position. - Return to park to attempt recovery.'
+    'Other AIC 524019.31 Reverser lever left in incorrect position. - Return to park to attempt recovery.',
+    1
 );
 
 -- Inserindo o segundo conjunto de dados
@@ -245,7 +297,7 @@ INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUn
 VALUES (
     '123456790',
     1,
-    'DiagnosticTroubleCodeAlert', 
+    'EnginePerformanceAlertDefinition', 
     'measurementAsInteger', 
     '5', 
     'Seconds', 
@@ -319,13 +371,93 @@ VALUES (
     'AIE', 
     'Other AIE 524021.33 Reverser lever up in incorrect position. - Return to park to attempt recovery.'
 );
+-- File Path: c:\WebApiBackend\init-script.sql
+INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription, Sent)
+VALUES (
+    '123456792',
+    2,
+    'EnginePerformanceAlertDefinition', 
+    'measurementAsInteger', 
+    '5', 
+    'Seconds', 
+    '2', 
+    'EngineHours', 
+    '670.50', 
+    'Hours', 
+    '36951159', 
+    '1', 
+    '2020-05-13T19:16:11.000Z', 
+    'Point', 
+    '41.123457', 
+    '-90.234568', 
+    'RED', 
+    'WARNING', 
+    'N', 
+    0, 
+    0, 
+    'Link', 
+    'machine', 
+    'https://sandboxapi.deere.com/platform/machines/123457', 
+    'Link', 
+    'self', 
+    'https://sandboxapi.deere.com/platform/api/alertTypes/diagnosticTroubleCodeAlert/definitions/1328106', 
+    '1234568', 
+    'DiagnosticTroubleCodeAlertDefinition', 
+    '524020', 
+    '32', 
+    '1', 
+    '141', 
+    'AID', 
+    'Other AID 524020.32 Reverser lever right in incorrect position. - Return to park to attempt recovery.',
+    1
+);
+
+INSERT INTO Alerts (Id, MachineId, Type, DurationType, DurationValue, DurationUnit, Occurrences, EngineHoursType, EngineHoursValue, EngineHoursUnit, MachineLinearTime, Bus, Time, LocationType, Lat, Lon, Color, Severity, AcknowledgementStatus, Ignored, Invisible, LinkType, LinkRel, LinkUri, DefinitionLinkType, DefinitionLinkRel, DefinitionLinkUri, DefinitionId, DefinitionType, DefinitionSuspectParameterName, DefinitionFailureModeIndicator, DefinitionBus, DefinitionSourceAddress, DefinitionThreeLetterAcronym, DefinitionDescription, Sent)
+VALUES (
+    '123456793',
+    2,
+    'DiagnosticTroubleCodeAlert', 
+    'measurementAsInteger', 
+    '7', 
+    'Seconds', 
+    '3', 
+    'EngineHours', 
+    '672.75', 
+    'Hours', 
+    '36951161', 
+    '2', 
+    '2020-05-13T19:17:11.000Z', 
+    'Point', 
+    '41.123458', 
+    '-90.234569', 
+    'YELLOW', 
+    'CRITICAL', 
+    'N', 
+    0, 
+    0, 
+    'Link', 
+    'machine', 
+    'https://sandboxapi.deere.com/platform/machines/123458', 
+    'Link', 
+    'self', 
+    'https://sandboxapi.deere.com/platform/api/alertTypes/diagnosticTroubleCodeAlert/definitions/1328107', 
+    '1234569', 
+    'DiagnosticTroubleCodeAlertDefinition', 
+    '524021', 
+    '33', 
+    '2', 
+    '142', 
+    'AIE', 
+    'Other AIE 524021.33 Reverser lever up in incorrect position. - Return to park to attempt recovery.',
+    0
+);
 
 -- Inserindo um encaminhamento para o primeiro alerta com o usuário "admin"
 INSERT INTO Encaminhamento (AlertId, IdUsuario, Motivo, IdEmpresa, EncaminhamentoAtivo, DataInclusao, DataAlteracao, UsuarioInc, UsuarioAlt, OrigemRetorno)
 VALUES (
     123456789, -- Substitua pelo ID do primeiro alerta inserido
     'admin',
-    'Alerta Vermleho',
+    'Alerta Vermelho',
     1, -- Substitua pelo ID da empresa
     1, -- EncaminhamentoAtivo (1 para ativo, 0 para inativo)
     GETDATE(), -- Data de inclusão (data atual)
@@ -334,5 +466,19 @@ VALUES (
     'admin', -- Usuário de alteração
     1 -- Origem do retorno (substitua pelo valor apropriado)
 );
+INSERT INTO Encaminhamento (AlertId, IdUsuario, Motivo, IdEmpresa, EncaminhamentoAtivo, DataInclusao, DataAlteracao, UsuarioInc, UsuarioAlt, OrigemRetorno)
+VALUES (
+    123456792,
+    'admin',
+    'Alerta Amarelo',
+    2,
+    1,
+    GETDATE(),
+    GETDATE(),
+    'admin', 
+    'admin',
+    1
+);
+
 
 PRINT 'Initialization script completed successfully.'
